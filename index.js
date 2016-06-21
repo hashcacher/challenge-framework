@@ -20,19 +20,60 @@ app.use(function(req, res, next) {
     next();
 });
 
-app.post('/analyze', function(req, res) {
-    console.log("body: " + Object.keys(req.body));
+app.post('/analyze/whitelist', function(req, res) {
     var code = req.body.code;
-    console.log("req: " + code);
-    var response = analyzeCode(code);
+    var whitelist = req.body.whitelist;
+    var response = analyzeWhitelist(code, whitelist);
     console.log("res: " + response);
     res.json({"response": response});
 });
 
-function analyzeCode(code) {
-	return esprima.parse(code);
+function analyzeWhitelist(code, whitelist) {
+	// Whitelist dictionary for fast lookup
+	var whitelistObj = {};
+	whilelist.forEach(function(item) {
+		whitelistObj[item] = false;
+	});
+
+	console.log("code:" + code);
+	console.log("whitelist:" + whitelist);
+	var syntax = esprima.parse(code);
+
+
+
+	//DFS
+	var list = syntax["body"]
+	while(list.length > 0)
+	{
+		var block = list[0];
+
+		//Check for whitelist
+		if(block.type in whitelistObj)
+		{
+			whitelistObj[block.type] = true;
+		}
+
+		//Check for other blocks inside
+		if("body" in block)
+		{
+			list.push(block.body)
+		}
+
+		//Remove the first item
+		list.shift(); 
+	}
+	
+	leftover = []
+	Object.keys(whitelistObj).forEach(function(key) {
+		if(whitelistObj[key] == false)
+			leftover.push(key);
+	});
 }
 
+function analyzeCode(code) {
+	var syntax = esprima.parse(code);
+	// console.log()
+}
 
 app.listen(app.get('port'), function() {
   console.log('Server started: http://localhost:' + app.get('port') + '/');

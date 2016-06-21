@@ -196,3 +196,13 @@ ul {
 .space-below {
   margin-bottom: 50px;
 }
+
+#editor { 
+    width: 500px;
+    height: 600px;
+    border: 1px solid #ccc;
+}
+
+button {
+  display: block;
+}
