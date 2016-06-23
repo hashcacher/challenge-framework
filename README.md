@@ -26,3 +26,5 @@ I jumped into Esprima right away once I saw that it would fit my needs. I later 
 * My Git commits are pretty bulky, but that's simply due to the ultra time constrained nature of this project.
 * Make "all good" result colored black or green instead of red.
 * Bug where it things the code is empty on reload. onchange isn't triggered.
+* Structure analysis: allow user to put in multiple expressions to check instead of just one.
+* I'd add raw esprima output to the API test page.

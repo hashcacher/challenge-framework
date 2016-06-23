@@ -42,14 +42,13 @@ var Tests = React.createClass({
     return {
       "whitelist": "",
       "blacklist": "",
+      "structure": "",
       "whitelistResults": "",
-      "blacklistResults": ""
+      "blacklistResults": "",
+      "structureResults": ""
     };
   },
   submitCode: function(fn) {
-    // var code = this.props.code;
-    // var whitelist = this.state[fn];
-    // console.log(fn + " " + whitelist);
     $.ajax({
       url: "/analyze/" + fn,
       type: "POST",
@@ -60,20 +59,32 @@ var Tests = React.createClass({
       },
       cache: false,
       success: function(data) {
-        console.log(data);
         this.setState({
           [fn + "Results"]: data.response
         });
       }.bind(this),
       error: function(xhr, status, err) {
-        this.setState({
-          [fn + "Results"]: err.toString()
-        });
-        console.error("/analyze", status, err.toString());
+        if(err == "")
+        {
+          this.setState({
+            [fn + "Results"]: "Server offline."
+          });
+        }
+        else
+        {
+          this.setState({
+            [fn + "Results"]: err.toString()
+          });
+        }
       }.bind(this),
     });
   },
-  handleInput: function(inputField, value) {
+  handleInput: function(inputField, event) {
+    this.setState({
+      [inputField]: event.target.value
+    });
+  },
+  handleReactSelectInput: function(inputField, value) {
     this.setState({
       [inputField]: value
     });
@@ -84,12 +95,12 @@ var Tests = React.createClass({
         <p>Here you can test the new API. Available terms for whitelist and blacklist can be found <a href="https://github.com/estree/estree/blob/master/spec.md">here</a>.</p>
         <ul>
           <li>
-            <label>Whitelist (, separated)</label>
+            <label>Whitelist (these tokens must appear in the code)</label>
             <Select
                 name="whitelist-select"
                 value={this.state.whitelist}
                 options={this.options()}
-                onChange={this.handleInput.bind(this, "whitelist")}
+                onChange={this.handleReactSelectInput.bind(this, "whitelist")}
                 multi
                 simpleValue
                 clearable={false}
@@ -99,18 +110,31 @@ var Tests = React.createClass({
           </li>
 
           <li>
-            <label>Blacklist (, separated)</label>
+            <label>Blacklist (these tokens may not appear in the code)</label>
             <Select
                 name="blacklist-select"
                 value={this.state.blacklist}
                 options={this.options()}
-                onChange={this.handleInput.bind(this, "blacklist")}
+                onChange={this.handleReactSelectInput.bind(this, "blacklist")}
                 multi
                 simpleValue
                 clearable={false}
             />
             <div className="test-results">{this.state.blacklistResults}</div>
             <button onClick={() => this.submitCode("blacklist")}>Check Code</button>
+          </li>
+
+          <li>
+            <label>Structure</label>
+            <p className="small-text">
+            {/*For some reason this won't automatically break into new lines. "<br/>"*/}
+            Use -> to indicate nesting.<br/>
+            For instance, ForStatement -> VariableDeclaration, ReturnStatement means <br/> 
+            there must be a Variable Declaration and Return Statement <br/>
+            inside of a For Statement somewhere in the code.</p>
+            <input className="wide-input" onPaste={this.handleInput.bind(this, "structure")} onInput={this.handleInput.bind(this, "structure")}/>
+            <div className="test-results">{this.state.structureResults}</div>
+            <button onClick={() => this.submitCode("structure")}>Check Code</button>
           </li>
         </ul>
       </div>
@@ -124,17 +148,18 @@ var CodeEditor = React.createClass({
   },
   componentDidMount: function() {
     var editor = ace.edit("editor");
-    // editor.setTheme("ace/theme/monokai");
     editor.getSession().setMode("ace/mode/javascript");
+    editor.getSession().on('change', this.handleInput);
     this.setState({"editor": editor});
   },
   handleInput: function() {
+    console.log("handleInput!");
     this.setState({"code": this.state.editor.getValue()});
   },
   render: function() {
     return(
       <div>
-        <div className="float-left" id="editor" onInput={this.handleInput}></div>
+        <div className="float-left" id="editor"></div>
         <Tests code={this.state.code}/>
       </div>
     );
