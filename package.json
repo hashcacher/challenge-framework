@@ -15,5 +15,13 @@
   "bugs": {
     "url": "https://github.com/hashcacher/challenge-framework/issues"
   },
-  "homepage": "https://github.com/hashcacher/challenge-framework#readme"
+  "dependencies": {
+    "express": "^4.1.0",
+    "body-parser": "^1.15.0",
+    "esprima": "^2.7.0"
+  },
+  "homepage": "https://github.com/hashcacher/challenge-framework#readme",
+  "devDependencies": {
+    "eslint": "^2.13.1"
+  }
 }
