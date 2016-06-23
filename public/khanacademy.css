@@ -1,0 +1,37 @@
+.objectives-pane-outer {
+    background-color: #f7f7f7;
+    border-bottom-color: #ddd;
+    border-bottom-style: solid;
+    border-bottom-width: 2px;
+    border-top-color: #ddd;
+    border-top-style: solid;
+    border-top-width: 2px;
+    min-height: 135px;
+    padding: 20px;
+    position: relative;
+}
+.min-contained-and-centered {
+    margin: 0 auto;
+    max-width: 1000px;
+}
+
+#challenge-task-container h2 {
+    margin-bottom: 10px;
+}
+
+#challenge-task-container .objectives-pane-outer .challenge-step {
+    color: #555;
+}
+
+#challenge-task-container .objectives-pane-outer .challenge-step .test-structure {
+    display: block;
+    float: right;
+    margin-top: -31px;
+    width: 400px;
+}
+
+#challenge-task-container .objectives-pane-outer .challenge-step .test-structure h3 {
+    color: #555;
+    display: inline-block;
+    margin-bottom: 10px;
+}

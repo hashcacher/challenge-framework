@@ -206,3 +206,36 @@ ul {
 button {
   display: block;
 }
+
+.horiz-space-2 {
+  margin: auto 20px;
+}
+
+.wide-input {
+  width: 100%;
+  margin-bottom: 10px;
+}
+
+/* Lists */
+ul {
+  list-style-type: none;
+  margin: 30px auto;
+  padding: 0;
+}
+ 
+li {
+  font: 200 20px/1.5 Helvetica, Verdana, sans-serif;
+  margin: 30px auto;
+}
+
+li a {
+  text-decoration: none;
+  color: #000;
+  display: block;
+  width: 200px;
+}
+
+.test-results {
+  color: red;
+  font-size: medium;
+}

@@ -1,8 +1,36 @@
+var Instructions = React.createClass({
+  render: function() {
+    return(
+      // Yes, I ripped this off of Khan Academy's site
+      <div>
+        <h2 className="white-heading-text">Hello Khan Academy</h2>
+        <div id="challenge-task-container" className="objectives-pane-outer">
+          <div id="objectives-pane" className="min-contained-and-centered"><h2>{this.props.title}</h2>
+            <div className="challenge-step">
+              <div className="test-structure">
+                <h3>Hint
+                </h3>
+                <div className="test-challenge-wrap">
+                </div>
+              </div>
+              <div className="test-description">
+              <p>{this.props.hint}</p>
+            </div>
+          </div>
+        </div>
+        </div>
+      </div>
+    );
+  }
+});
+
 var Tests = React.createClass({
   getInitialState: function() {
     return {
       "whitelist": "",
       "blacklist": "",
+      "whitelistResults": "",
+      "blacklistResults": ""
     };
   },
   submitCode: function(fn) {
@@ -15,16 +43,19 @@ var Tests = React.createClass({
       dataType: 'json',
       data: {
         "code": this.props.code,
-        fn: this.state.fn
+        [fn]: this.state[fn]
       },
       cache: false,
       success: function(data) {
         console.log(data);
         this.setState({
-          "syntax": data
+          [fn + "Results"]: data.response
         });
       }.bind(this),
       error: function(xhr, status, err) {
+        this.setState({
+          [fn + "Results"]: err.toString()
+        });
         console.error("/analyze", status, err.toString());
       }.bind(this),
     });
@@ -36,13 +67,21 @@ var Tests = React.createClass({
   },
   render: function() {
     return(
-      <div className="horiz-space">
-        <label>Whitelist (, separated)</label><input onChange={this.handleInput.bind(this, "whitelist")}/>
-        <button onClick={() => this.submitCode("whitelist")}>Check Code</button>
+      <div className="float-left horiz-space-2">
+        <p>Here you can test the new API. Available terms for whitelist and blacklist can be found <a href="https://github.com/estree/estree/blob/master/spec.md">here</a>.</p>
+        <ul>
+          <li>
+            <label>Whitelist (, separated)</label><input onInput={this.handleInput.bind(this, "whitelist")} className="wide-input"/>
+            <div className="test-results">{this.state.whitelistResults}</div>
+            <button onClick={() => this.submitCode("whitelist")}>Check Code</button>
+          </li>
 
-        <label>Blacklist (, separated)</label><input onChange={this.handleInput.bind(this, "blacklist")}/>
-        <button onClick={() => this.submitCode("blacklist")}>Check Code</button>
-        
+          <li>
+            <label>Blacklist (, separated)</label><input onInput={this.handleInput.bind(this, "blacklist")} className="wide-input"/>
+            <div className="test-results">{this.state.blacklistResults}</div>
+            <button onClick={() => this.submitCode("blacklist")}>Check Code</button>
+          </li>
+        </ul>
       </div>
       );
   }
@@ -75,7 +114,7 @@ var AppContainer = React.createClass({
   render: function() {
     return(
       <div>
-        <h3>Hello Khan Academy</h3>
+        <Instructions title="Challenge API Test Page" hint="Write some javascript, then use the side panel to run tests on it."/>
         <CodeEditor />
       </div>
     );
