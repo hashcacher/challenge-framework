@@ -16,7 +16,6 @@ app.use(function(req, res, next) {
 
     // Disable caching so we"ll always get the latest comments.
     res.setHeader("Cache-Control", "no-cache");
-    next();
 });
 
 app.post("/analyze/whitelist", function(req, res) {
@@ -59,7 +58,7 @@ app.post("/analyze/blacklist", function(req, res) {
         var AST = null;
         try
         {
-            var AST = esprima.parse(code, {loc: true});
+            AST = esprima.parse(code, {loc: true});
         }
         catch(error)
         {
@@ -139,8 +138,8 @@ function validListString(listString) {
     if(invalidNodeList === false) return "Invalid list.";
     else if(Array.isArray(invalidNodeList) && invalidNodeList.length > 0)
     {
-        return "You entered some invalid terms: " + invalidNodeList.join(", ")
-            + ". Please make sure all terms are valid.";
+        return "You entered some invalid terms: " + invalidNodeList.join(", ") + 
+            ". Please make sure all terms are valid.";
     }
     else return "OK";
 }
@@ -150,7 +149,7 @@ function invalidNodes(nodelist) {
     if(!Array.isArray(nodelist)) return false;
     badNodes = [];
     nodelist.forEach(function(node) {
-        if(validNodes.indexOf(node) == -1) badNodes.push(node)
+        if(validNodes.indexOf(node) === -1) badNodes.push(node);
     });
     return badNodes;
 }
@@ -188,7 +187,7 @@ function nodesExistInCode(code, list) {
         // We're not validating each item in arrays, just concatting, so we validate here.
         if(!node)
         {
-            queue.shift()
+            queue.shift();
             continue;
         }
 
@@ -198,8 +197,8 @@ function nodesExistInCode(code, list) {
         //Check for other nodes inside
         Object.keys(node).forEach(function(key) {
             if(Array.isArray(node[key])) //leads to infinite loop
-                queue = queue.concat(node[key])
-            else if(node[key] && typeof(node[key]) == "object")
+                queue = queue.concat(node[key]);
+            else if(node[key] && typeof node[key] === "object")
                 queue.push(node[key]);
         });
 
@@ -220,7 +219,7 @@ function analyzeList(code, listString, type)
     var accumulator = [];
     // Any nodes that weren't found will be false in the dictionary obj
     Object.keys(existence).forEach(function(key) {
-        if(existence[key] === false && type == "whitelist" || existence[key] != false && type == "blacklist")
+        if(existence[key] === false && type === "whitelist" || existence[key] !== false && type === "blacklist")
         {
             var stringToPut = key;
             if(type == "blacklist") stringToPut += ":" + existence[key];
@@ -252,7 +251,7 @@ function analyzeStructure(code, structureString)
         
         if(!node)
         {
-            queue.shift()
+            queue.shift();
             continue;
         }
 
@@ -262,15 +261,15 @@ function analyzeStructure(code, structureString)
         //Check for other nodes inside
         Object.keys(node).forEach(function(key) 
         {
-            if(Array.isArray(node[key])) queue = queue.concat(node[key])
-            else if(node[key] && typeof(node[key]) == "object") queue.push(node[key]);
+            if(Array.isArray(node[key])) queue = queue.concat(node[key]);
+            else if(node[key] && typeof node[key] === "object") queue.push(node[key]);
         });
 
         //Remove the first item
         queue.shift();
     }
 
-    if(parentInstances.length == 0) return [parent]
+    if(parentInstances.length === 0) return [parent];
 
     //Find children inside of the parents.
     var foundAll = false;
@@ -278,7 +277,7 @@ function analyzeStructure(code, structureString)
         var childrenLeftToFind = children.slice(0);
         Object.keys(node).forEach(function(key) 
         {
-            if(node[key] && typeof(node[key]) == "object" && !Array.isArray(node[key]))
+            if(node[key] && typeof node[key] == "object" && !Array.isArray(node[key]))
             {
                 var index = childrenLeftToFind.indexOf(node[key].type);
                 if(index != -1) childrenLeftToFind.splice(index, 1);
@@ -295,7 +294,7 @@ function analyzeStructure(code, structureString)
                 });
             }
         });
-        if(childrenLeftToFind.length == 0)
+        if(childrenLeftToFind.length === 0)
         {
             foundAll = true;
             return;

@@ -170,7 +170,9 @@ var AppContainer = React.createClass({
   render: function() {
     return(
       <div>
-        <Instructions title="Challenge API Test Page" hint="Write some javascript, then use the side panel to run tests on it."/>
+        <Instructions title="Challenge API Test Page" 
+          hint="This API lets you check for specific constructs inside of your JS code.
+            Write some javascript in the box on the left, then use the side panel below to run various tests on it."/>
         <CodeEditor />
       </div>
     );
