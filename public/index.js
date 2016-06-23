@@ -25,6 +25,19 @@ var Instructions = React.createClass({
 });
 
 var Tests = React.createClass({
+  validTerms: ["Node", "Identifier", "Literal", "RegExpLiteral", "Program", "Function", "Statement",
+    "ExpressionStatement", "BlockStatement", "EmptyStatement", "DebuggerStatement", "WithStatement",
+    "ReturnStatement", "LabeledStatement", "BreakStatement", "ContinueStatement", "IfStatement",
+    "SwitchStatement", "SwitchCase", "ThrowStatement", "TryStatement", "CatchClause", "WhileStatement",
+    "DoWhileStatement", "ForStatement", "ForInStatement", "Declaration", "FunctionDeclaration",
+    "VariableDeclaration", "VariableDeclarator", "Expression", "ThisExpression", "ArrayExpression",
+    "ObjectExpression", "Property", "FunctionExpression", "UnaryExpression", "UnaryOperator", "UpdateExpression",
+    "UpdateOperator", "BinaryExpression", "BinaryOperator", "AssignmentExpression", "AssignmentOperator", "LogicalExpression",
+    "LogicalOperator", "MemberExpression", "ConditionalExpression", "CallExpression", "NewExpression",
+    "SequenceExpression", "Pattern"],
+  options: function() {
+    return this.validTerms.map(function(term) { return {label: term, value: term}}); // arrow function gives error here.
+  },
   getInitialState: function() {
     return {
       "whitelist": "",
@@ -60,9 +73,9 @@ var Tests = React.createClass({
       }.bind(this),
     });
   },
-  handleInput: function(inputField, event) {
+  handleInput: function(inputField, value) {
     this.setState({
-      [inputField]: event.target.value
+      [inputField]: value
     });
   },
   render: function() {
@@ -71,13 +84,31 @@ var Tests = React.createClass({
         <p>Here you can test the new API. Available terms for whitelist and blacklist can be found <a href="https://github.com/estree/estree/blob/master/spec.md">here</a>.</p>
         <ul>
           <li>
-            <label>Whitelist (, separated)</label><input onInput={this.handleInput.bind(this, "whitelist")} className="wide-input"/>
+            <label>Whitelist (, separated)</label>
+            <Select
+                name="whitelist-select"
+                value={this.state.whitelist}
+                options={this.options()}
+                onChange={this.handleInput.bind(this, "whitelist")}
+                multi
+                simpleValue
+                clearable={false}
+            />
             <div className="test-results">{this.state.whitelistResults}</div>
             <button onClick={() => this.submitCode("whitelist")}>Check Code</button>
           </li>
 
           <li>
-            <label>Blacklist (, separated)</label><input onInput={this.handleInput.bind(this, "blacklist")} className="wide-input"/>
+            <label>Blacklist (, separated)</label>
+            <Select
+                name="blacklist-select"
+                value={this.state.blacklist}
+                options={this.options()}
+                onChange={this.handleInput.bind(this, "blacklist")}
+                multi
+                simpleValue
+                clearable={false}
+            />
             <div className="test-results">{this.state.blacklistResults}</div>
             <button onClick={() => this.submitCode("blacklist")}>Check Code</button>
           </li>
