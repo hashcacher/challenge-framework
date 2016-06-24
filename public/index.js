@@ -57,6 +57,7 @@ var Tests = React.createClass({
         "code": this.props.code,
         [fn]: this.state[fn]
       },
+      timeout: 3000,
       cache: false,
       success: function(data) {
         this.setState({
@@ -76,7 +77,7 @@ var Tests = React.createClass({
             [fn + "Results"]: err.toString()
           });
         }
-      }.bind(this),
+      }.bind(this)
     });
   },
   handleInput: function(inputField, event) {

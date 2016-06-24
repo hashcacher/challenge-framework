@@ -13,9 +13,8 @@ app.use(bodyParser.urlencoded({extended: true}));
 
 app.use(function(req, res, next) {
     res.setHeader("Access-Control-Allow-Origin", "*");
-
-    // Disable caching so we"ll always get the latest comments.
     res.setHeader("Cache-Control", "no-cache");
+    next();
 });
 
 app.post("/analyze/whitelist", function(req, res) {
