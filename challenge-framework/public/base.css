@@ -1,0 +1,242 @@
+body {
+  background: #fff;
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-size: 15px;
+  line-height: 1.7;
+  margin: 0;
+  padding: 30px;
+}
+
+a {
+  color: #4183c4;
+  text-decoration: none;
+}
+
+a:hover {
+  text-decoration: underline;
+}
+
+code {
+  background-color: #f8f8f8;
+  border: 1px solid #ddd;
+  border-radius: 3px;
+  font-family: "Bitstream Vera Sans Mono", Consolas, Courier, monospace;
+  font-size: 12px;
+  margin: 0 2px;
+  padding: 0 5px;
+}
+
+h1, h2, h3, h4 {
+  font-weight: bold;
+  margin: 0 0 15px;
+  padding: 0;
+}
+
+h1 {
+  border-bottom: 1px solid #ddd;
+  font-size: 2.5em;
+  font-weight: bold;
+  margin: 0 0 15px;
+  padding: 0;
+}
+
+h2 {
+  /*border-bottom: 1px solid #eee;*/
+  font-size: 2em;
+}
+
+h3 {
+  font-size: 1.5em;
+}
+
+h4 {
+  font-size: 1.2em;
+}
+
+p, ul {
+  margin: 5px 0;
+}
+
+ul {
+  padding-left: 30px;
+}
+
+input {
+  /*margin: 5px 0;*/
+}
+
+.tall {
+  padding: 20px 0px !important;
+}
+
+.inline {
+  display: inline;
+}
+
+.horiz-space {
+  margin: auto 20px;
+  float: left;
+  text-align: center;
+  /*margin-top: -5px;*/
+}
+
+.right-aligned {
+  float: right;
+  margin-right: 20px;
+}
+
+.transparent-background {
+  opacity: .2;
+  background-size: cover;
+  background-position: center;
+  position: absolute;
+}
+
+.sexy-background img {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: auto;
+    opacity: 0.3;
+}
+
+/*animations*/
+.example-enter {
+  opacity: 0.01;
+}
+
+.example-enter.example-enter-active {
+  opacity: 1;
+  transition: opacity 1000ms ease-in;
+}
+
+.example-leave {
+  opacity: 1;
+}
+
+.example-leave.example-leave-active {
+  opacity: 0.01;
+  transition: opacity 300ms ease-in;
+}
+
+.example-appear {
+  opacity: 0.01;
+}
+
+.example-appear.example-appear-active {
+  opacity: 1;
+  transition: opacity .5s ease-in;
+}
+/*--------------------------*/
+
+/*stats accordion*/
+
+.statswrap {
+    height: 0;
+    overflow: hidden;
+    transition: all .2s ease-in; /* not working? */
+}
+
+.comment {
+  border: 1px solid #ddd;
+  border-top-left-radius: 4px;
+  border-top-right-radius: 4px;
+}
+
+/*cancel out bootstrap*/
+.list-group-item {
+  border: white !important;
+}
+/*-------------------*/
+
+.comment.open > .statswrap {
+  height: auto;
+}
+
+
+/*Sidebars*/
+.float-right {
+  float: right;
+}
+
+.float-left {
+  float: left;
+}
+
+.right-side-container {
+  float: right;
+  width: 100%;
+}
+
+.full-width-item {
+  width: 100%;
+  height: 20px;
+}
+
+.full-width {
+  width: 100%;
+}
+
+.no-bullets {
+  list-style-type: none;
+}
+
+.truncate {
+  width: 90%;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.space-below {
+  margin-bottom: 50px;
+}
+
+#editor { 
+    width: 500px;
+    height: 600px;
+    border: 1px solid #ccc;
+}
+
+button {
+  display: block;
+  margin: 5px 0;
+}
+
+.horiz-space-2 {
+  margin: auto 20px;
+}
+
+.wide-input {
+  width: 100%;
+  /*margin-bottom: 10px;*/
+}
+
+/* Lists */
+ul {
+  list-style-type: none;
+  margin: 30px auto;
+  padding: 0;
+}
+ 
+li {
+  font: 200 20px/1.5 Helvetica, Verdana, sans-serif;
+  margin: 30px auto;
+}
+
+li a {
+  text-decoration: none;
+  color: #000;
+  display: block;
+  width: 200px;
+}
+
+.test-results {
+  color: red;
+  font-size: medium;
+}
+
+.small-text {
+  font-size: small;
+}
