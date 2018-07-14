@@ -1,15 +1,26 @@
+import React from 'react';
+import logo from './logo.svg';
+import './App.css';
+import './base.css';
+
+import $ from 'jquery';
+
+import Select from 'react-select';
+import 'react-select/dist/react-select.css';
+
+import AceEditor from 'react-ace';
+import 'brace/mode/javascript';
+import 'brace/theme/github';
+
 class Instructions extends React.Component{
-  render: function() {
+  render() {
     return(
-      // Yes, I ripped this off of Khan Academy's site
       <div>
-        <h2 className="white-heading-text">Hello Khan Academy</h2>
+        <h2 className="white-heading-text">JavaScript Static Analyzer</h2>
         <div id="challenge-task-container" className="objectives-pane-outer">
           <div id="objectives-pane" className="min-contained-and-centered"><h2>{this.props.title}</h2>
             <div className="challenge-step">
               <div className="test-structure">
-                <h3>Hint
-                </h3>
                 <div className="test-challenge-wrap">
                 </div>
               </div>
@@ -25,7 +36,20 @@ class Instructions extends React.Component{
 }
 
 class Tests extends React.Component{
-  validTerms: ["Node", "Identifier", "Literal", "RegExpLiteral", "Program", "Function", "Statement",
+  options() {
+    return this.validTerms.map(function(term) { return {label: term, value: term}}); // arrow function gives error here.
+  }
+  constructor(props) {
+  	super(props);
+    this.state = {
+      "whitelist": "",
+      "blacklist": "",
+      "structure": "",
+      "whitelistResults": "",
+      "blacklistResults": "",
+      "structureResults": ""
+    };
+  this.validTerms = ["Node", "Identifier", "Literal", "RegExpLiteral", "Program", "Function", "Statement",
     "ExpressionStatement", "BlockStatement", "EmptyStatement", "DebuggerStatement", "WithStatement",
     "ReturnStatement", "LabeledStatement", "BreakStatement", "ContinueStatement", "IfStatement",
     "SwitchStatement", "SwitchCase", "ThrowStatement", "TryStatement", "CatchClause", "WhileStatement",
@@ -34,21 +58,9 @@ class Tests extends React.Component{
     "ObjectExpression", "Property", "FunctionExpression", "UnaryExpression", "UnaryOperator", "UpdateExpression",
     "UpdateOperator", "BinaryExpression", "BinaryOperator", "AssignmentExpression", "AssignmentOperator", "LogicalExpression",
     "LogicalOperator", "MemberExpression", "ConditionalExpression", "CallExpression", "NewExpression",
-    "SequenceExpression", "Pattern"],
-  options: function() {
-    return this.validTerms.map(function(term) { return {label: term, value: term}}); // arrow function gives error here.
-  },
-  getInitialState: function() {
-    return {
-      "whitelist": "",
-      "blacklist": "",
-      "structure": "",
-      "whitelistResults": "",
-      "blacklistResults": "",
-      "structureResults": ""
-    };
-  },
-  submitCode: function(fn) {
+    "SequenceExpression", "Pattern"]
+  }
+  submitCode(fn) {
     $.ajax({
       url: "/analyze/" + fn,
       type: "POST",
@@ -79,21 +91,20 @@ class Tests extends React.Component{
         }
       }.bind(this)
     });
-  },
-  handleInput: function(inputField, event) {
+  }
+  handleInput(inputField, event) {
     this.setState({
       [inputField]: event.target.value
     });
-  },
-  handleReactSelectInput: function(inputField, value) {
+  }
+  handleReactSelectInput(inputField, value) {
     this.setState({
       [inputField]: value
     });
-  },
-  render: function() {
+  }
+  render() {
     return(
       <div className="float-left horiz-space-2">
-        <p>Here you can test the new API. Available terms for whitelist and blacklist can be found <a href="https://github.com/estree/estree/blob/master/spec.md">here</a>.</p>
         <ul>
           <li>
             <label>Whitelist (these tokens must appear in the code)</label>
@@ -143,32 +154,49 @@ class Tests extends React.Component{
   }
 }
 
-class CodeEditor extends React.Component{
-  getInitialState: function() {
-    return {code: ""};
-  },
-  componentDidMount: function() {
-    var editor = ace.edit("editor");
-    editor.getSession().setMode("ace/mode/javascript");
-    editor.getSession().on('change', this.handleInput);
-    this.setState({"editor": editor});
-  },
-  handleInput: function() {
-    console.log("handleInput!");
-    this.setState({"code": this.state.editor.getValue()});
-  },
-  render: function() {
-    return(
-      <div>
-        <div className="float-left" id="editor"></div>
-        <Tests code={this.state.code}/>
-      </div>
-    );
+class CodeEditor extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {code: 
+`function fibonacci(num){
+  var a = 1, b = 0, temp;
+
+  while (num >= 0){
+    temp = a;
+    a = a + b;
+    b = temp;
+    num--;
+  }
+
+  return b;
+}
+`};
+  }
+  handleInput(newVal) {
+	this.setState((prevState, props) => ({
+  	  code: newVal
+	}));
+  }
+  render() {
+  	  return (
+	<div id='ace-container'>
+  	  <AceEditor
+    	mode="javascript"
+    	theme="github"
+    	onChange={this.handleInput.bind(this)}
+    	name="editor"
+    	editorProps={{$blockScrolling: true}}
+    	className="float-left"
+    	value={this.state.code}
+  	  />
+      <Tests code={this.state.code}/>
+  </div>
+  	  );
   }
 }
 
 class AppContainer extends React.Component{
-  render: function() {
+  render() {
     return(
       <div>
         <Instructions title="Challenge API Test Page" 
@@ -180,7 +208,4 @@ class AppContainer extends React.Component{
   }
 }
 
-ReactDOM.render(
-  <AppContainer/>,
-  document.getElementById('content')
-);
+export default AppContainer;

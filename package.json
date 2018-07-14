@@ -4,7 +4,7 @@
   "description": "Khan Academy Take-Home",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
   },
   "repository": {
     "type": "git",
@@ -16,9 +16,9 @@
     "url": "https://github.com/hashcacher/challenge-framework/issues"
   },
   "dependencies": {
-    "express": "^4.1.0",
     "body-parser": "^1.15.0",
-    "esprima": "^2.7.0"
+    "esprima": "^2.7.0",
+    "express": "^4.1.0"
   },
   "homepage": "https://github.com/hashcacher/challenge-framework#readme",
   "devDependencies": {

@@ -200,8 +200,15 @@ input {
 }
 
 button {
-  display: block;
-  margin: 5px 0;
+    background-color: #4CAF50; /* Green */
+    border: none;
+    color: white;
+    margin: 5px auto;
+    padding: 10px 10px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
 }
 
 .horiz-space-2 {
@@ -240,3 +247,4 @@ li a {
 .small-text {
   font-size: small;
 }
+

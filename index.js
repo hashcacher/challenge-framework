@@ -7,7 +7,7 @@ var esprima = require("esprima");
 
 app.set("port", process.env.PORT || 3001);
 
-app.use("/", express.static(path.join(__dirname, "public")));
+app.get("/", express.static(path.join(__dirname, "public")));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: true}));
 
