@@ -62,7 +62,7 @@ class Tests extends React.Component{
   }
   submitCode(fn) {
     $.ajax({
-      url: "/analyze/" + fn,
+      url: "http://gregoryguterman.com:3001/analyze/" + fn,
       type: "POST",
       dataType: 'json',
       data: {
