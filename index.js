@@ -10,7 +10,8 @@ app.set("port", process.env.PORT || 3001);
 // Set up front end
 var webDir = path.join(__dirname, 'web', 'build')
 app.use(express.static(webDir));
-app.get('/', function(req, res) {
+
+app.get('/challenge-framework', function(req, res) {
   res.sendFile(path.join(webDir, 'index.html'));
 });
 
@@ -26,7 +27,7 @@ app.use(function(req, res, next) {
     next();
 });
 
-app.post("/analyze/whitelist", function(req, res) {
+app.post("/challenge-framework/analyze/whitelist", function(req, res) {
     var code = req.body.code;
     var whitelistString = req.body.whitelist;
     var inputValid = validListString(whitelistString);
@@ -56,7 +57,7 @@ app.post("/analyze/whitelist", function(req, res) {
 
 
 // This could have been coalesced with the whitelist handler...
-app.post("/analyze/blacklist", function(req, res) {
+app.post("/challenge-framework/analyze/blacklist", function(req, res) {
     var code = req.body.code;
     var blacklistString = req.body.blacklist;
     var inputValid = validListString(blacklistString);
@@ -83,7 +84,7 @@ app.post("/analyze/blacklist", function(req, res) {
     else res.json({"response": inputValid});
 });
 
-app.post("/analyze/structure", function(req, res) {
+app.post("/challenge-framework/analyze/structure", function(req, res) {
     var code = req.body.code;
     var structureString = req.body.structure;
     var inputValid = validStructure(structureString);
