@@ -2,6 +2,7 @@
   "name": "challenge-framework",
   "version": "0.1.0",
   "private": true,
+  "homepage": "http://gregoryguterman.com/challenge-framework",
   "dependencies": {
     "ace-builds": "^1.3.3",
     "jquery": "^3.3.1",
