@@ -1,0 +1,35 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: challenge
+  labels:
+    app: challenge
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: challenge
+  template:
+    metadata:
+      labels:
+        app: challenge
+    spec:
+      containers:
+      - name: challenge
+        image: gcr.io/portfolio-239904/github_hashcacher_challenge:idk
+        ports:
+        - containerPort: 3001
+
+---
+
+kind: Service
+apiVersion: v1
+metadata:
+  name: challenge
+spec:
+  selector:
+    app: challenge
+  ports:
+  - protocol: TCP
+    port: 3001
+    targetPort: 3001

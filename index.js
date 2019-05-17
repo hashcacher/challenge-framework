@@ -7,12 +7,21 @@ var esprima = require("esprima");
 
 app.set("port", process.env.PORT || 3001);
 
-app.get("/", express.static(path.join(__dirname, "public")));
+// Set up front end
+var webDir = path.join(__dirname, 'web', 'build')
+app.use(express.static(webDir));
+app.get('/', function(req, res) {
+  res.sendFile(path.join(webDir, 'index.html'));
+});
+
+if (process.env.NODE_ENV == 'debug') {
+  console.warn('DEBUG build; Using CORS');
+  app.use(require('cors')());
+}
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: true}));
 
 app.use(function(req, res, next) {
-    res.setHeader("Access-Control-Allow-Origin", "*");
     res.setHeader("Cache-Control", "no-cache");
     next();
 });
@@ -247,7 +256,7 @@ function analyzeStructure(code, structureString)
     while(queue.length > 0)
     {
         var node = queue[0];
-        
+
         if(!node)
         {
             queue.shift();

@@ -1,26 +1,26 @@
-import React from 'react';
+import React, { Component } from 'react';
+
 import logo from './logo.svg';
 import './App.css';
-import './base.css';
-
-import $ from 'jquery';
 
 import Select from 'react-select';
 import 'react-select/dist/react-select.css';
 
-import AceEditor from 'react-ace';
-import 'brace/mode/javascript';
-import 'brace/theme/github';
+import $ from 'jquery'
+import ace from 'ace-builds'
+
+const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:3001'
 
 class Instructions extends React.Component{
   render() {
     return(
       <div>
-        <h2 className="white-heading-text">JavaScript Static Analyzer</h2>
         <div id="challenge-task-container" className="objectives-pane-outer">
           <div id="objectives-pane" className="min-contained-and-centered"><h2>{this.props.title}</h2>
             <div className="challenge-step">
               <div className="test-structure">
+                <h3>Hint
+                </h3>
                 <div className="test-challenge-wrap">
                 </div>
               </div>
@@ -49,7 +49,7 @@ class Tests extends React.Component{
       "blacklistResults": "",
       "structureResults": ""
     };
-  this.validTerms = ["Node", "Identifier", "Literal", "RegExpLiteral", "Program", "Function", "Statement",
+  this.validTerms = ["Identifier", "Literal", "RegExpLiteral", "Function", "Statement",
     "ExpressionStatement", "BlockStatement", "EmptyStatement", "DebuggerStatement", "WithStatement",
     "ReturnStatement", "LabeledStatement", "BreakStatement", "ContinueStatement", "IfStatement",
     "SwitchStatement", "SwitchCase", "ThrowStatement", "TryStatement", "CatchClause", "WhileStatement",
@@ -62,7 +62,7 @@ class Tests extends React.Component{
   }
   submitCode(fn) {
     $.ajax({
-      url: "http://gregoryguterman.com:3001/analyze/" + fn,
+      url: API_URL + "/analyze/" + fn,
       type: "POST",
       dataType: 'json',
       data: {
@@ -105,6 +105,7 @@ class Tests extends React.Component{
   render() {
     return(
       <div className="float-left horiz-space-2">
+        <p>Here you can test the new API. Available terms for whitelist and blacklist can be found <a href="https://github.com/estree/estree/blob/master/spec.md">here</a>.</p>
         <ul>
           <li>
             <label>Whitelist (these tokens must appear in the code)</label>
@@ -154,44 +155,28 @@ class Tests extends React.Component{
   }
 }
 
-class CodeEditor extends React.Component {
+class CodeEditor extends React.Component{
   constructor(props) {
     super(props);
-    this.state = {code: 
-`function fibonacci(num){
-  var a = 1, b = 0, temp;
-
-  while (num >= 0){
-    temp = a;
-    a = a + b;
-    b = temp;
-    num--;
+    this.state = { code: "" };
   }
-
-  return b;
-}
-`};
+  componentDidMount() {
+    var editor = ace.edit("editor");
+    editor.getSession().setMode("ace/mode/javascript");
+    editor.getSession().on('change', this.handleInput);
+    this.setState({"editor": editor});
   }
-  handleInput(newVal) {
-	this.setState((prevState, props) => ({
-  	  code: newVal
-	}));
+  handleInput = () => {
+    console.log("handleInput!");
+    this.setState({"code": this.state.editor.getValue()});
   }
   render() {
-  	  return (
-	<div id='ace-container'>
-  	  <AceEditor
-    	mode="javascript"
-    	theme="github"
-    	onChange={this.handleInput.bind(this)}
-    	name="editor"
-    	editorProps={{$blockScrolling: true}}
-    	className="float-left"
-    	value={this.state.code}
-  	  />
-      <Tests code={this.state.code}/>
-  </div>
-  	  );
+    return(
+      <div>
+        <div className="float-left" id="editor"></div>
+        <Tests code={this.state.code}/>
+      </div>
+    );
   }
 }
 
